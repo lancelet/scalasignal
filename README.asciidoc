@@ -1,0 +1,7 @@
+= scalasignal - Signal Processing Library for Scala =
+
+== Introduction ==
+
+ScalaSignal will be a signal processing library for Scala.  Currently it is
+under development and not usable.  Once functionality begins to emerge, this
+README file will be updated.
