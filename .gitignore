@@ -1,0 +1,5 @@
+*~
+.DS_Store
+lib_managed
+target
+project/boot
