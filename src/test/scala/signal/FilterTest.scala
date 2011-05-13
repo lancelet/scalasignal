@@ -84,12 +84,12 @@ class FilterTest extends FunSuite {
     val b = List(0.5, 0.5)
     val si = List(0.0)
     val y = Filter.filter(b, a, inStream, Some(si))
-    assert(trackingIterable.pullCount === 2)  // stream will pull 2 to begin with
+    assert(trackingIterable.pullCount === 1)  // stream will pull 1 to begin with
     assert(y.isInstanceOf[Stream[Double]])
     y.drop(5)  // force evaluation
-    assert(trackingIterable.pullCount === 7)
+    assert(trackingIterable.pullCount === 6)
     y.drop(6)  // force evaluation
-    assert(trackingIterable.pullCount === 8)
+    assert(trackingIterable.pullCount === 7)
   }
 
 }
