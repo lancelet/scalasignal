@@ -12,6 +12,7 @@ Copyright (C) Jonathan Merritt 2011.
 == Current Functionality ==
 
 ScalaSignal currently implements the following:
+
   - `filter(b, a, x, si)` - digital filtering with FIR or IIR filters
   - `filtfilt(b, a, x)` - forward-reverse zero phase lag digital filtering
 
