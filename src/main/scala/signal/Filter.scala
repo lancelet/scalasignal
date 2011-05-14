@@ -49,18 +49,22 @@ object Filter {
     * @return filtered signal
     *
     * @author Jonathan Merritt <merritt@unimelb.edu.au> */
-  def filter[T, That](b: Iterable[T], a: Iterable[T], x: Iterable[T], si: Option[Iterable[T]] = None)
-  (implicit n: Fractional[T], bf: CanBuildFrom[Iterable[T], T, That], m: ClassManifest[T]): That = {
+  def filter[T, Repr, That]
+  (b: Iterable[T], a: Iterable[T], x: Repr, si: Option[Iterable[T]] = None)
+  (implicit n: Fractional[T], 
+   iterableX: Repr => Iterable[T],
+   bf: CanBuildFrom[Repr, T, That],
+   m: ClassManifest[T]): That = {
+
+    import n._
 
     val filterIterator = new Iterator[T] {
       // normalize a and b; dividing both by a(0), and pad them with zeros so they're the same
       //  length as each other
       private val a0: T = a.head
       private val abSz = math.max(a.size, b.size)
-      private val aNorm: IndexedSeq[T] = (a map { n.div(_, a0) }: Iterable[T]).
-        toIndexedSeq.padTo(abSz, n.zero)
-      private val bNorm: IndexedSeq[T] = (b map { n.div(_, a0) }: Iterable[T]).
-        toIndexedSeq.padTo(abSz, n.zero)
+      private val aNorm = a.map(_ / a0).toIndexedSeq.padTo(abSz, n.zero)
+      private val bNorm = b.map(_ / a0).toIndexedSeq.padTo(abSz, n.zero)
 
       // create initial state array; use zeroes if it's not provided
       private val z: Array[T] = si.getOrElse { List.fill(abSz - 1)(n.zero) }.toArray
@@ -71,9 +75,9 @@ object Filter {
       // method to update the state array (z) on each iteration
       private def updateZ(z: Array[T], bTail: IndexedSeq[T], aTail: IndexedSeq[T], xm: T, ym: T) {
         for (i <- 0 until (z.size - 1)) {
-          z(i) = n.minus(n.plus(n.times(bTail(i), xm), z(i + 1)), n.times(aTail(i), ym))
+	  z(i) = bTail(i) * xm + z(i + 1) - aTail(i) * ym
         }
-        z(z.size - 1) = n.minus(n.times(bTail(z.size - 1), xm), n.times(aTail(z.size - 1), ym))
+	z(z.size - 1) = bTail(z.size - 1) * xm - aTail(z.size - 1) * ym
       }
 
       private val b0 = bNorm.head
@@ -85,7 +89,7 @@ object Filter {
       override def hasNext: Boolean = xIterator.hasNext
       override def next(): T = {
         val xm: T = xIterator.next
-        val ym: T = n.plus(n.times(b0, xm), z(0))
+	val ym: T = b0 * xm + z(0)
         updateZ(z, bTail, aTail, xm, ym)
         ym
       }
