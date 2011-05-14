@@ -5,13 +5,7 @@ import org.scalatest.FunSuite
 
 class FilterTest extends FunSuite {
 
-  // Tests for approximate equality between two Doubles.
-  def doubleAeq(a: Double, y: Double, tol: Double = 1.0E-10): Boolean =
-    (a + tol >= y) && (a - tol <= y)
-
-  // Tests for approximate equality between two Double iterables.
-  def doubleItAeq(a: Iterable[Double], b: Iterable[Double], tol: Double = 1.0E-10): Boolean = 
-    (a.size == b.size) && (a zip b).forall { ab => doubleAeq(ab._1, ab._2, tol) }
+  import FilterTest._
 
   test("apply an FIR filter with no initial state") {
     val a = List(1.0)
@@ -91,5 +85,17 @@ class FilterTest extends FunSuite {
     y.drop(6)  // force evaluation
     assert(trackingIterable.pullCount === 7)
   }
+
+}
+
+object FilterTest {
+
+  // Tests for approximate equality between two Doubles.
+  def doubleAeq(a: Double, y: Double, tol: Double = 1.0E-10): Boolean =
+    (a + tol >= y) && (a - tol <= y)
+
+  // Tests for approximate equality between two Double iterables.
+  def doubleItAeq(a: Iterable[Double], b: Iterable[Double], tol: Double = 1.0E-10): Boolean = 
+    (a.size == b.size) && (a zip b).forall { ab => doubleAeq(ab._1, ab._2, tol) }
 
 }
