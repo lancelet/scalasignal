@@ -11,7 +11,7 @@ import scalala.tensor.dense.DenseMatrix.{ eye, horzcat, vertcat, zeros }
 
 object FiltFilt {
 
-  /** Computes the initial state of the filter.
+  /** Computes the stable state of the filter.
     *
     * The method used here is described in the following paper:
     *
@@ -97,7 +97,7 @@ object FiltFilt {
     val aNorm = a.map(_ / a0).toIndexedSeq.padTo(filterOrder + 1, n.zero)
     val bNorm = b.map(_ / a0).toIndexedSeq.padTo(filterOrder + 1, n.zero)
 
-    // compute the initial conditions for the filter's state variable (si / x(0)).
+    // compute the stable conditions for the filter's state variable (si / x(0)).
     //  see Filter.filter() for more information on the state variable.
     val zi = computeZi(bNorm, aNorm)
 
