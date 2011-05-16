@@ -8,7 +8,7 @@ class FiltFiltTest extends FunSuite {
 
   test("filtfilt is called on data that is too short") {
     intercept[IllegalArgumentException] {
-      FiltFilt.filtfilt(List(0.33, 0.33, 0.33), List(1.), List(1., 2, 3))
+      FiltFilt.filtfilt(List(0.33, 0.33, 0.33), List(1), List(1., 2, 3))
     }
   }
 

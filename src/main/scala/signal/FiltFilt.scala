@@ -68,10 +68,12 @@ object FiltFilt {
     * @tparam That collection of `x` that will be produced by the filtering
     * @see [[scala.signal.Filter.filter]]
     * @author Jonathan Merritt <merritt@unimelb.edu.au> */
-  def filtfilt[T, Repr, That]
-  (b: Iterable[T], a: Iterable[T], x: Repr)
-  (implicit n: Fractional[T],
-   iterableX: Repr => Iterable[T],
+  def filtfilt[T, A, B, Repr, That]
+  (b: Iterable[B], a: Iterable[A], x: Repr)
+  (implicit iterableX: Repr => Iterable[T],
+   n: Fractional[T],
+   aToT: A => T,
+   bToT: B => T,
    s: Scalar[T],
    sub: BinaryOp[T, T, OpSub, T],
    mul: BinaryOp[T, T, OpMul, T],
@@ -94,8 +96,8 @@ object FiltFilt {
 
     // normalize a and b (divide by a0), and pad them out to the same length
     val a0 = a.head
-    val aNorm = a.map(_ / a0).toIndexedSeq.padTo(filterOrder + 1, n.zero)
-    val bNorm = b.map(_ / a0).toIndexedSeq.padTo(filterOrder + 1, n.zero)
+    val aNorm = a.map(implicitly[T](_) / a0).toIndexedSeq.padTo(filterOrder + 1, n.zero)
+    val bNorm = b.map(implicitly[T](_) / a0).toIndexedSeq.padTo(filterOrder + 1, n.zero)
 
     // compute the stable conditions for the filter's state variable (si / x(0)).
     //  see Filter.filter() for more information on the state variable.

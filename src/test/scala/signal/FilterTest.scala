@@ -2,13 +2,14 @@ package signal
 
 import collection.immutable.{ Iterable, Stream }
 import org.scalatest.FunSuite
+import scalala.scalar.{ Complex => C }
 
 class FilterTest extends FunSuite {
 
   import FilterTest._
 
   test("apply an FIR filter with no initial state") {
-    val a = List(1.0)
+    val a = List(1)
     val b = List(0.25, 0.50, 0.75)
     val x = List(1, 2, 3, 4, 5, 6, 7, 8, 9, 10.0)
     val y = Filter.filter(b, a, x)
@@ -17,7 +18,7 @@ class FilterTest extends FunSuite {
   }
 
   test("apply an FIR filter with specified initial state") {
-    val a = List(1.0)
+    val a = List(1)
     val b = List(0.25, 0.50, 0.75)
     val x = List(1, 2, 3, 4, 5, 6, 7, 8, 9, 10.0)
     val si = List(5, 7.)
@@ -27,7 +28,7 @@ class FilterTest extends FunSuite {
   }
 
   test("apply an IIR filter with no initial state") {
-    val a = List(1., 5, 7)
+    val a = List(1, 5, 7)
     val b = List(0.25, 0.50, 0.75)
     val x = List(1, 2, 3, 4, 5, 6, 7, 8, 9, 10.)
     val y = Filter.filter(b, a, x)
@@ -36,7 +37,7 @@ class FilterTest extends FunSuite {
   }
 
   test("apply an IIR filter with specified initial state") {
-    val a = List(1., 5, 7)
+    val a = List(1, 5, 7)
     val b = List(0.25, 0.50, 0.75)
     val x = List(1, 2, 3, 4, 5, 6, 7, 8, 9, 10.)
     val si = List(-3., 4)
@@ -47,7 +48,7 @@ class FilterTest extends FunSuite {
   }
 
   test("filter is called with an invalid initial state") {
-    val a = List(1., 5, 7)
+    val a = List(1, 5, 7)
     val b = List(0.25, 0.50, 0.75)
     val x = List(1, 2, 3, 4, 5, 6, 7, 8, 9, 10.)
     val si = List(-3., 4, 11)  // wrong length
@@ -74,9 +75,9 @@ class FilterTest extends FunSuite {
 
     // create a lazy evaluation situation
     val inStream = Stream() ++ trackingIterable  // trackingIterable is not eval'd
-    val a = List(1.0)
+    val a = List(1)
     val b = List(0.5, 0.5)
-    val si = List(0.0)
+    val si = List(0)
     val y: Stream[Double] = Filter.filter(b, a, inStream, Some(si))
     assert(trackingIterable.pullCount === 1)  // stream will pull 1 to begin with
     assert(y.isInstanceOf[Stream[_]])
@@ -85,6 +86,17 @@ class FilterTest extends FunSuite {
     y.drop(6)  // force evaluation
     assert(trackingIterable.pullCount === 7)
   }
+
+  test("apply a filter to a sequence of complex numbers") (pending)
+/*
+  test("apply a filter to a sequence of complex numbers") {
+    val a = List(1)
+    val b = List(0.5, 0.5)
+    val x = List(C(1,1), C(2,2), C(3,3), C(4,4), C(5,5), C(6,6), C(7,7), C(8,8),
+		 C(9,9), C(10,10))
+    val y = Filter.filter(b, a, x)
+  }
+*/
 
 }
 

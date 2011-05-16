@@ -49,12 +49,16 @@ object Filter {
     * @return filtered signal
     *
     * @author Jonathan Merritt <merritt@unimelb.edu.au> */
-  def filter[T, Repr, That]
-  (b: Iterable[T], a: Iterable[T], x: Repr, si: Option[Iterable[T]] = None)
-  (implicit n: Fractional[T], 
-   iterableX: Repr => Iterable[T],
+  def filter[T, A, B, C, Repr, That]
+  (b: Iterable[B], a: Iterable[A], x: Repr, si: Option[Iterable[C]] = None)
+  (implicit iterableX: Repr => Iterable[T],
+   n: Fractional[T],
+   aToT: A => T,
+   bToT: B => T,
+   cToT: C => T,
    bf: CanBuildFrom[Repr, T, That],
-   m: ClassManifest[T]): That = {
+   m: ClassManifest[T]): That =
+  {
 
     import n._
 
@@ -63,11 +67,15 @@ object Filter {
       //  length as each other
       private val a0: T = a.head
       private val abSz = math.max(a.size, b.size)
-      private val aNorm = a.map(_ / a0).toIndexedSeq.padTo(abSz, n.zero)
-      private val bNorm = b.map(_ / a0).toIndexedSeq.padTo(abSz, n.zero)
+      private val aNorm = a.map(implicitly[T](_) / a0).toIndexedSeq.padTo(abSz, n.zero)
+      private val bNorm = b.map(implicitly[T](_) / a0).toIndexedSeq.padTo(abSz, n.zero)
 
       // create initial state array; use zeroes if it's not provided
-      private val z: Array[T] = si.getOrElse { List.fill(abSz - 1)(n.zero) }.toArray
+      private val z: Array[T] = (if (si.isDefined) {
+	si.get.map { implicitly[T](_) }
+      } else {
+	List.fill(abSz - 1)(n.zero)
+      }).toArray
       if (z.size != abSz - 1) {
 	throw new IllegalArgumentException ("si.size must be (max(a.size, b.size) - 1)")
       }
