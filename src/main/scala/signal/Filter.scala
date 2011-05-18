@@ -52,20 +52,18 @@ object Filter {
     * @tparam C type of the elements of `si`
     * @tparam Repr the type of the signal, which must be available as an
     *   `collection.immutable.Seq[T]`
-    * @tparam That the return type, which must have a
-    *   `CanBuildFrom[Repr, T, That]`
     * @return filtered signal
     *
     * @author Jonathan Merritt <merritt@unimelb.edu.au> */
-  def filter[T, A, B, C, Repr, That]
+  def filter[T, A, B, C, Repr]
   (b: Seq[B], a: Seq[A], x: Repr, si: Option[Seq[C]] = None)
   (implicit seqX: Repr => Seq[T],
    n: Fractional[T],
    aToT: A => T,
    bToT: B => T,
    cToT: C => T,
-   bf: CanBuildFrom[Repr, T, That],
-   m: ClassManifest[T]): That =
+   bf: CanBuildFrom[Repr, T, Repr],
+   m: ClassManifest[T]): Repr =
   {
 
     import n._

@@ -67,10 +67,9 @@ object FiltFilt {
     * @tparam B type of the elements of `b`
     * @tparam Repr collection of `x`, which must be available as an
     *   `Seq[T]`.
-    * @tparam That collection of `x` that will be produced by the filtering
     * @see [[scala.signal.Filter.filter]]
     * @author Jonathan Merritt <merritt@unimelb.edu.au> */
-  def filtfilt[T, A, B, Repr, That]
+  def filtfilt[T, A, B, Repr]
   (b: Seq[B], a: Seq[A], x: Repr)
   (implicit seqX: Repr => Seq[T],
    n: Fractional[T],
@@ -81,8 +80,8 @@ object FiltFilt {
    mul: BinaryOp[T, T, OpMul, T],
    neg: UnaryOp[T, OpNeg, T],
    solveMatrixBy: BinaryOp[DenseMatrix[T], DenseMatrix[T], OpSolveMatrixBy, DenseMatrix[T]],
-   bf: CanBuildFrom[Repr, T, That],
-   m: ClassManifest[T]): That = {
+   bf: CanBuildFrom[Repr, T, Repr],
+   m: ClassManifest[T]): Repr = {
 
     import n._
 
