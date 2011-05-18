@@ -2,7 +2,7 @@ package signal
 
 import collection.Iterator
 import collection.generic.CanBuildFrom
-import collection.immutable.{ IndexedSeq, Iterable }
+import collection.immutable.{ IndexedSeq, Iterable, Seq }
 
 object Filter {
 
@@ -46,12 +46,20 @@ object Filter {
     * @param x input signal
     * @param si optional initial state for the filter.  If `si` is supplied, it
     *  should have a length equal to `max(a.size, b.size)`
+    * @tparam T type of the elements of the signal to be filtered
+    * @tparam A type of the elements of `a`
+    * @tparam B type of the elements of `b`
+    * @tparam C type of the elements of `si`
+    * @tparam Repr the type of the signal, which must be available as an
+    *   `collection.immutable.Seq[T]`
+    * @tparam That the return type, which must have a
+    *   `CanBuildFrom[Repr, T, That]`
     * @return filtered signal
     *
     * @author Jonathan Merritt <merritt@unimelb.edu.au> */
   def filter[T, A, B, C, Repr, That]
-  (b: Iterable[B], a: Iterable[A], x: Repr, si: Option[Iterable[C]] = None)
-  (implicit iterableX: Repr => Iterable[T],
+  (b: Seq[B], a: Seq[A], x: Repr, si: Option[Seq[C]] = None)
+  (implicit seqX: Repr => Seq[T],
    n: Fractional[T],
    aToT: A => T,
    bToT: B => T,

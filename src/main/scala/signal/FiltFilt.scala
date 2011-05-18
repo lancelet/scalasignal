@@ -1,7 +1,7 @@
 package signal
 
 import collection.generic.CanBuildFrom
-import collection.immutable.{ IndexedSeq, Iterable, Vector }
+import collection.immutable.{ IndexedSeq, Seq, Vector }
 import scalala.operators.Implicits._
 import scalala.operators.{ BinaryOp, OpSub, OpMul, OpNeg, OpSolveMatrixBy, UnaryOp }
 import scalala.scalar.Scalar
@@ -63,14 +63,16 @@ object FiltFilt {
     * @param x signal to filter.  `x.size` must be greater than 3 times the
     *   order of the filter.
     * @tparam T type of the elements of `x`
+    * @tparam A type of the elements of `a`
+    * @tparam B type of the elements of `b`
     * @tparam Repr collection of `x`, which must be available as an
-    *   `Iterable[T]`.
+    *   `Seq[T]`.
     * @tparam That collection of `x` that will be produced by the filtering
     * @see [[scala.signal.Filter.filter]]
     * @author Jonathan Merritt <merritt@unimelb.edu.au> */
   def filtfilt[T, A, B, Repr, That]
-  (b: Iterable[B], a: Iterable[A], x: Repr)
-  (implicit iterableX: Repr => Iterable[T],
+  (b: Seq[B], a: Seq[A], x: Repr)
+  (implicit seqX: Repr => Seq[T],
    n: Fractional[T],
    aToT: A => T,
    bToT: B => T,
