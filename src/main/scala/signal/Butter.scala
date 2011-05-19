@@ -2,7 +2,7 @@ package signal
 
 object Butter {
 
-  /** Constructs a second-order-section Butterworth filter.
+  /** Constructs a second-order-section low-pass Butterworth filter.
     *
     * For this function, the Butterworth filter must be an even order.
     *
