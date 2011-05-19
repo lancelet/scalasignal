@@ -15,6 +15,9 @@ ScalaSignal currently implements the following:
 
   - `filter(b, a, x, si)` - digital filtering with FIR or IIR filters
   - `filtfilt(b, a, x)` - forward-reverse zero phase lag digital filtering
+  - `sosfilt(sos, x)` - second order section (SOS) / biquad filtering
+  - `butterSOSEven(n, Wn)` - SOS coefficients for even-order Butterworth 
+     filters
 
 == Installation ==
 
