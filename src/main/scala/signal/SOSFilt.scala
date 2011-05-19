@@ -33,7 +33,8 @@ import scalala.tensor.Matrix
   * @param a1 filter coefficient
   * @param a2 filter coefficient
   * @author Jonathan Merritt <merritt@unimelb.edu.au> */
-case class SOSFilt[T](b0: T, b1: T, b2: T, a1: T, a2: T)(implicit n: Numeric[T]) {
+case class SOSFilt[@specialized(Float,Double) T](b0: T, b1: T, b2: T, a1: T, a2: T)
+(implicit n: Numeric[T]) {
 
   import n._
 

@@ -54,8 +54,11 @@ object Filter {
     *   `collection.immutable.Seq[T]`
     * @return filtered signal
     *
+    * TODO: Make filter specialized in Float and Double.  Currently
+    *       causes a compiler crash (Scala 2.9.0).
+    * 
     * @author Jonathan Merritt <merritt@unimelb.edu.au> */
-  def filter[T, A, B, C, Repr]
+  def filter[/* @specialized(Float, Double) */ T, A, B, C, Repr]
   (b: Seq[B], a: Seq[A], x: Repr, si: Option[Seq[C]] = None)
   (implicit seqX: Repr => Seq[T],
    n: Fractional[T],
