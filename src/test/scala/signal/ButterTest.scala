@@ -5,6 +5,8 @@ import org.scalatest.matchers.ShouldMatchers
 
 class ButterTest extends FunSuite with ShouldMatchers {
 
+  import FilterTest._
+
   test("butterSOSEven is called with an odd order (requires even)") {
     intercept[IllegalArgumentException] { Butter.butterSOSEven(5, 0.5) }
   }
@@ -34,8 +36,16 @@ class ButterTest extends FunSuite with ShouldMatchers {
     g.b2 should be (0.29289 plusOrMinus 1e-5)
     g.a1 should be (0.0 plusOrMinus 1e-10)
     g.a2 should be (0.17157 plusOrMinus 1e-5)
-  }
 
-  test("construct a fourth-order filter with butterSOSEven") (pending)
+    // cutoff frequency of 0.04 (checked using coefficients from Matlab)
+    val fl3 = Butter.butterSOSEven(2, 0.04)
+    assert(fl3.size == 1)
+    val h = fl3.head
+    h.b0 should be (0.0036 plusOrMinus 1e-4)
+    h.b1 should be (0.0072 plusOrMinus 1e-4)
+    h.b2 should be (0.0036 plusOrMinus 1e-4)
+    h.a1 should be (-1.8227 plusOrMinus 1e-4)
+    h.a2 should be (0.8372 plusOrMinus 1e-4)
+  }
 
 }

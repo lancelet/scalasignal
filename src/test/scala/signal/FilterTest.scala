@@ -57,6 +57,25 @@ class FilterTest extends FunSuite {
     }
   }
 
+  test("apply a low-pass 2nd order Butterworth filter to an ECG phantom signal") {
+    // this is a comparison with Matlab data
+    val a = List(1, -1.8227, 0.8372)
+    val b = List(0.0036, 0.0072, 0.0036)
+    val y = Filter.filter(b, a, ECG.noisyecg)
+    val yExpected = ECG.butter2filter
+    assert(doubleItAeq(y, yExpected, 1e-6))
+    /* // Plot in case of problems
+    import scalala.library.Plotting._
+    import scalala.scalar.Scalar
+    import scalala.tensor.dense.DenseVector
+    val x = DenseVector.range(0, ECG.noisyecg.size)
+    plot.hold = true
+    plot(x, ECG.noisyecg.toArray)
+    plot(x, yExpected.toArray)
+    plot(x, y.toArray, '.')
+    */
+  }
+
   test("filter should be lazy where possible; requesting x elements only when required") {
     // to test the lazy behaviour, we will create a custom Iterable[Double] that keeps
     //  track of the number of elements requested.  this is slightly kludgy, as it depends
@@ -88,15 +107,6 @@ class FilterTest extends FunSuite {
   }
 
   test("apply a filter to a sequence of complex numbers") (pending)
-/*
-  test("apply a filter to a sequence of complex numbers") {
-    val a = List(1)
-    val b = List(0.5, 0.5)
-    val x = List(C(1,1), C(2,2), C(3,3), C(4,4), C(5,5), C(6,6), C(7,7), C(8,8),
-		 C(9,9), C(10,10))
-    val y = Filter.filter(b, a, x)
-  }
-*/
 
 }
 

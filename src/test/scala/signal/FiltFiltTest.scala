@@ -39,4 +39,15 @@ class FiltFiltTest extends FunSuite {
     assert(doubleItAeq(y, yExpected, 1.0E-4))  // check to 1.0E-4: precis of Octave output
   }
 
+  test("apply a low-pass 2nd order Butterworth filtfilt to an ECG phantom signal") {
+    // this is a comparison with Matlab data
+    val a = List(1, -1.8227, 0.8372)
+    val b = List(0.0036, 0.0072, 0.0036)
+    val y = FiltFilt.filtfilt(b, a, ECG.noisyecg)
+    val yExpected = ECG.butter2filtfilt
+    assert(doubleItAeq(y, yExpected, 1e-6))
+  }
+
+  test("apply a low-pass 4th order Butterworth SOS filter to an ECG phantom signal") (pending)
+
 }

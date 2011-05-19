@@ -1,6 +1,7 @@
 package signal
 
 import org.scalatest.FunSuite
+import scalala.tensor.dense.DenseMatrix
 
 class SOSFiltTest extends FunSuite {
 
@@ -26,8 +27,55 @@ class SOSFiltTest extends FunSuite {
     assert(doubleItAeq(y, yExpected, 1e-7))
   }
 
-  test("apply a 4-th order Butterworth filter specified using a Matrix") (pending)
+  test("apply a 4th order low pass Butterworth filter to an ECG phantom signal") {
+    // this is a comparison with Matlab data
+    val filters = Butter.butterSOSEven(4, 0.08)
+    val y = SOSFilt.sosfilt(filters, ECG.noisyecg)
+    val gain = 1.8322e-4 // gain from Matlab
+    val yExpected = ECG.butter4sosfilt.map(_ * 1.8322e-4)
+    assert(doubleItAeq(y, yExpected, 1e-4))
+  }
 
-  test("SOSFilt evaluation should be lazy where possible") (pending)
+  test("apply a 4-th order Butterworth filter specified using a Matrix") {
+    // this is a comparison with Matlab data
+    val filter = DenseMatrix(
+      Array(1, 2, 1, 1, -1.5752, 0.6263),
+      Array(1, 2, 1, 1, -1.7688, 0.8262)
+    )
+    val x = List(1., 2, 3, 4, 5, 6, 7, 8, 9, 10)
+    val y = SOSFilt.sosfilt(filter, x)
+    val yExpected = List(0.0010, 0.0093, 0.0440, 0.1420, 0.3582, 0.7612,
+			 1.4265, 2.4282, 3.8372, 5.7059).map(_ * 1000.0)
+    assert(doubleItAeq(y, yExpected, 1.0))
+  }
+
+  test("SOSFilt evaluation should be lazy where possible") {
+    // create Iterable[Double] that keeps track of number of requested elements
+    val trackingIterable = new Iterable[Double] {
+      private var _pullCount: Int = 0
+      def pullCount: Int = _pullCount
+      def iterator: Iterator[Double] = new Iterator[Double] {
+	override def hasNext: Boolean = true
+	override def next(): Double = {
+	  _pullCount = _pullCount + 1
+	  0.0
+	}
+      }
+    }
+
+    // create lazy evaluation scenario
+    val inStream = Stream() ++ trackingIterable
+    val filter = DenseMatrix(
+      Array(1, 2, 1, 1, -1.5752, 0.6263),
+      Array(1, 2, 1, 1, -1.7688, 0.8262)      
+    )
+    val y = SOSFilt.sosfilt(filter, inStream)
+    assert(trackingIterable.pullCount === 1)
+    assert(y.isInstanceOf[Stream[_]])
+    y.drop(5)
+    assert(trackingIterable.pullCount === 6)
+    y.drop(6)
+    assert(trackingIterable.pullCount === 7)
+  }
 
 }
