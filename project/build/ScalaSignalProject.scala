@@ -1,6 +1,8 @@
 import sbt._
+import de.element34.sbteclipsify._
 
-class ScalaSignalProject(info: ProjectInfo) extends DefaultProject(info) {
+class ScalaSignalProject(info: ProjectInfo) extends DefaultProject(info) 
+with Eclipsify {
 
   val scalaToolsSnapshots = "Scala-Tools Snapshots" at "http://scala-tools.org/repo-snapshots"
 
