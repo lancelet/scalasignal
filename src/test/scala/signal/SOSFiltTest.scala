@@ -27,7 +27,7 @@ class SOSFiltTest extends FunSuite {
     assert(doubleItAeq(y, yExpected, 1e-7))
   }
 
-  test("apply a 4th order low pass Butterworth filter to an ECG phantom signal") {
+  test("apply a 4th order low pass Butterworth filter to an ECG phantom") {
     // this is a comparison with Matlab data
     val filters = Butter.butterSOSEven(4, 0.08)
     val y = SOSFilt.sosfilt(filters, ECG.noisyecg)

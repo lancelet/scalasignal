@@ -32,7 +32,8 @@ class FilterTest extends FunSuite {
     val b = List(0.25, 0.50, 0.75)
     val x = List(1, 2, 3, 4, 5, 6, 7, 8, 9, 10.)
     val y = Filter.filter(b, a, x)
-    val yExpected = List(0.25, -0.25, 2, -4.25, 12.75, -27, 54.25, -72.25, -7, 553.75)
+    val yExpected = List(0.25, -0.25, 2, -4.25, 12.75, -27, 54.25, -72.25, -7, 
+    					 553.75)
     assert(doubleItAeq(y, yExpected))
   }
 
@@ -57,7 +58,7 @@ class FilterTest extends FunSuite {
     }
   }
 
-  test("apply a low-pass 2nd order Butterworth filter to an ECG phantom signal") {
+  test("apply a low-pass 2nd order Butterworth filter to an ECG phantom") {
     // this is a comparison with Matlab data
     val a = List(1, -1.8227, 0.8372)
     val b = List(0.0036, 0.0072, 0.0036)
@@ -76,10 +77,11 @@ class FilterTest extends FunSuite {
     */
   }
 
-  test("filter should be lazy where possible; requesting x elements only when required") {
-    // to test the lazy behaviour, we will create a custom Iterable[Double] that keeps
-    //  track of the number of elements requested.  this is slightly kludgy, as it depends
-    //  upon un-documented features of Stream, but it can be adapted if Stream changes.
+  test("filter should be lazy where possible") {
+    // to test the lazy behaviour, we will create a custom Iterable[Double] 
+    //  that keeps track of the number of elements requested.  this is slightly 
+    //  kludgy, as it depends upon un-documented features of Stream, but it can 
+    //  be adapted if Stream changes.
     val trackingIterable = new Iterable[Double] {
       private var _pullCount: Int = 0
       def pullCount: Int = _pullCount
@@ -93,12 +95,12 @@ class FilterTest extends FunSuite {
     }
 
     // create a lazy evaluation situation
-    val inStream = Stream() ++ trackingIterable  // trackingIterable is not eval'd
+    val inStream = Stream() ++ trackingIterable  // trackingIterable not eval'd
     val a = List(1)
     val b = List(0.5, 0.5)
     val si = List(0)
     val y: Stream[Double] = Filter.filter(b, a, inStream, Some(si))
-    assert(trackingIterable.pullCount === 1)  // stream will pull 1 to begin with
+    assert(trackingIterable.pullCount === 1)  // stream will pull 1
     assert(y.isInstanceOf[Stream[_]])
     y.drop(5)  // force evaluation
     assert(trackingIterable.pullCount === 6)
@@ -117,7 +119,9 @@ object FilterTest {
     (a + tol >= y) && (a - tol <= y)
 
   // Tests for approximate equality between two Double iterables.
-  def doubleItAeq(a: Iterable[Double], b: Iterable[Double], tol: Double = 1.0E-10): Boolean = 
-    (a.size == b.size) && (a zip b).forall { ab => doubleAeq(ab._1, ab._2, tol) }
+  def doubleItAeq
+  (a: Iterable[Double], b: Iterable[Double], tol: Double = 1.0E-10): Boolean = 
+    (a.size == b.size) && (a zip b).
+    forall { ab => doubleAeq(ab._1, ab._2, tol) }
 
 }

@@ -18,7 +18,8 @@ class FiltFiltTest extends FunSuite {
     // test data
     val x = List[Double](1, 3, 4, 4, 6, 1, 8, 13, 2, 5, 5000)
     // expected output (generated using Octave)
-    val yExpected = List[Double](1, 2.75, 3.75, 4.5, 4.25, 4, 7.5, 9, 5.5, 1253, 5000)
+    val yExpected = List[Double](1, 2.75, 3.75, 4.5, 4.25, 4, 7.5, 9, 5.5, 
+                                 1253, 5000)
     // apply filtfilt and check output
     val y = FiltFilt.filtfilt(b, List[Double](1), x)
     assert(doubleItAeq(y, yExpected))
@@ -36,10 +37,10 @@ class FiltFiltTest extends FunSuite {
 				 13.2717, 12.0638, 10.9936)
     // apply filtfilt and check output
     val y = FiltFilt.filtfilt(b, a, x)
-    assert(doubleItAeq(y, yExpected, 1.0E-4))  // check to 1.0E-4: precis of Octave output
+    assert(doubleItAeq(y, yExpected, 1.0E-4))  // 1.0E-4: precis Octave output
   }
 
-  test("apply a low-pass 2nd order Butterworth filtfilt to an ECG phantom signal") {
+  test("apply a low-pass 2nd order Butterworth filtfilt to an ECG phantom") {
     // this is a comparison with Matlab data
     val a = List(1, -1.8227, 0.8372)
     val b = List(0.0036, 0.0072, 0.0036)
@@ -48,6 +49,8 @@ class FiltFiltTest extends FunSuite {
     assert(doubleItAeq(y, yExpected, 1e-6))
   }
 
-  test("apply a low-pass 4th order Butterworth SOS filter to an ECG phantom signal") (pending)
+  test("apply a low-pass 4th order Butterworth SOS filter to an ECG phantom") {
+	pending
+  }
 
 }
