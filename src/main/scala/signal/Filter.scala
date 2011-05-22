@@ -62,12 +62,12 @@ object Filter {
   def filter[ /* @specialized(Float, Double) */ T, A, B, C, Repr]
   (b: Seq[B], a: Seq[A], x: Repr, si: Option[Seq[C]] = None)
   (implicit seqX: Repr => Seq[T],
-    n: Fractional[T],
-    aToT: A => T,
-    bToT: B => T,
-    cToT: C => T,
-    bf: CanBuildFrom[Repr, T, Repr],
-    m: ClassManifest[T]): Repr = {
+   n: Fractional[T],
+   aToT: A => T,
+   bToT: B => T,
+   cToT: C => T,
+   bf: CanBuildFrom[Repr, T, Repr],
+   m: ClassManifest[T]): Repr = {
 
     import n._
 

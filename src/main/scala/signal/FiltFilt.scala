@@ -28,13 +28,13 @@ object FiltFilt {
   private def computeZi[T]
   (bNorm: IndexedSeq[T], aNorm: IndexedSeq[T])
   (implicit s: Scalar[T],
-    neg: UnaryOp[T, OpNeg, T],
-    sub: BinaryOp[T, T, OpSub, T],
-    mul: BinaryOp[T, T, OpMul, T],
-    sm: BinaryOp[DenseMatrix[T], DenseMatrix[T], OpSolveMatrixBy, 
-                 DenseMatrix[T]],
-    m: ClassManifest[T]): List[T] = {
-
+   neg: UnaryOp[T, OpNeg, T],
+   sub: BinaryOp[T, T, OpSub, T],
+   mul: BinaryOp[T, T, OpMul, T],
+   sm: BinaryOp[DenseMatrix[T], DenseMatrix[T], OpSolveMatrixBy, 
+                DenseMatrix[T]],
+   m: ClassManifest[T]): List[T] = {
+    
     require(aNorm.size == bNorm.size)
     val fo = aNorm.size - 1 // filter order
 
@@ -78,17 +78,17 @@ object FiltFilt {
   def filtfilt[T, A, B, Repr]
   (b: Seq[B], a: Seq[A], x: Repr)
   (implicit seqX: Repr => Seq[T],
-    n: Fractional[T],
-    aToT: A => T,
-    bToT: B => T,
-    s: Scalar[T],
-    sub: BinaryOp[T, T, OpSub, T],
-    mul: BinaryOp[T, T, OpMul, T],
-    neg: UnaryOp[T, OpNeg, T],
-    solveMatrixBy: BinaryOp[DenseMatrix[T], DenseMatrix[T], OpSolveMatrixBy, 
-                            DenseMatrix[T]],
-    bf: CanBuildFrom[Repr, T, Repr],
-    m: ClassManifest[T]): Repr = {
+   n: Fractional[T],
+   aToT: A => T,
+   bToT: B => T,
+   s: Scalar[T],
+   sub: BinaryOp[T, T, OpSub, T],
+   mul: BinaryOp[T, T, OpMul, T],
+   neg: UnaryOp[T, OpNeg, T],
+   solveMatrixBy: BinaryOp[DenseMatrix[T], DenseMatrix[T], OpSolveMatrixBy, 
+                           DenseMatrix[T]],
+   bf: CanBuildFrom[Repr, T, Repr],
+   m: ClassManifest[T]): Repr = {
 
     import n._
 

@@ -5,6 +5,24 @@ import scala.io.Source
 /** Some ECG phantom test signals. */ 
 object ECG {
 
+  /** Loads a signal from a source file.
+   * 
+   *  Signal source files are text files containing a 1D signal.  Each line of
+   *  the file may contain a comment, which starts with a `#` symbol, or a
+   *  double-precision number, specified in text form.
+   *  
+   *  For example, a valid file may look like this:
+   *  {{{
+   *  # This first line is a comment
+   *  1.00
+   *  2.00
+   *  3.00
+   *  # For some reason, another comment
+   *  42.556
+   *  }}}
+   *  
+   *  @param source source from which to load the signal
+   *  @return the signal */
   private def loadSignal(source: Source): List[Double] = {
     val x = source.getLines.filterNot(_.trim.startsWith("#")).
     	map(_.trim.toDouble).toList
@@ -12,6 +30,14 @@ object ECG {
     x
   }
 
+  /** Loads a signal from the `ecg` directory.
+   *  
+   *  This method loads a signal (specified as indicated in the
+   *  comments for the `loadSignal` method), from the
+   *  `src/test/resources/signal/ecg` directory of the project.
+   *  
+   *  @param name name of the file to load
+   *  @return the signal */
   private def ecgSignal(name: String): List[Double] = {
     val rs = getClass.getResourceAsStream("ecg/%s" format name)
     val x = loadSignal(Source.fromInputStream(rs))

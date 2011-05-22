@@ -53,9 +53,11 @@ case class SOSFilt[@specialized(Float, Double) T]
    *  @param x signal to filter
    *  @return filtered signal
    */
-  def apply[Repr](x: Repr)(implicit seqX: Repr => Seq[T],
-    bf: CanBuildFrom[Repr, T, Repr],
-    m: ClassManifest[T]): Repr = {
+  def apply[Repr]
+  (x: Repr)
+  (implicit seqX: Repr => Seq[T],
+   bf: CanBuildFrom[Repr, T, Repr],
+   m: ClassManifest[T]): Repr = {
     // filter iterator
     val filterIterator = new Iterator[T] {
       private var (z0, z1) = (n.zero, n.zero) // initial state
@@ -106,8 +108,8 @@ object SOSFilt {
   def sosfilt[T, Repr]
   (sos: SOSFilt[T], x: Repr)
   (implicit seqX: Repr => Seq[T],
-    bf: CanBuildFrom[Repr, T, Repr],
-    m: ClassManifest[T]): Repr = sos(x)
+   bf: CanBuildFrom[Repr, T, Repr],
+   m: ClassManifest[T]): Repr = sos(x)
 
   /** Applies a stack of `SOSFilt`s to a signal.
    *
@@ -123,9 +125,9 @@ object SOSFilt {
   def sosfilt[T, SOSRepr, XRepr]
   (sos: SOSRepr, x: XRepr)
   (implicit xSeq: XRepr => Seq[T],
-    sosSeq: SOSRepr => LinearSeq[SOSFilt[T]],
-    bf: CanBuildFrom[XRepr, T, XRepr],
-    m: ClassManifest[T]): XRepr = {
+   sosSeq: SOSRepr => LinearSeq[SOSFilt[T]],
+   bf: CanBuildFrom[XRepr, T, XRepr],
+   m: ClassManifest[T]): XRepr = {
     val builder = bf(x)
     builder ++= sosfiltTailRec(sos, x)
     builder.result
@@ -161,10 +163,12 @@ object SOSFilt {
    *  @param x signal to which the SOS filter(s) should be applied
    *  @return filtered signal
    */
-  def sosfilt[T, Repr](sos: Matrix[T], x: Repr)(implicit xSeq: Repr => Seq[T],
-    f: Fractional[T],
-    bf: CanBuildFrom[Repr, T, Repr],
-    m: ClassManifest[T]): Repr = {
+  def sosfilt[T, Repr]
+  (sos: Matrix[T], x: Repr)
+  (implicit xSeq: Repr => Seq[T],
+   f: Fractional[T],
+   bf: CanBuildFrom[Repr, T, Repr],
+   m: ClassManifest[T]): Repr = {
     // check the matrix size
     require(sos.numCols == 6)
     require(sos.numRows >= 1)
