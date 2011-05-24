@@ -1,6 +1,7 @@
 package signal
 
 import org.scalatest.matchers.ShouldMatchers._
+import scalala.scalar.Complex
 
 /** Performs comparisons for testing purposes. */
 object Comparisons {
@@ -12,6 +13,17 @@ object Comparisons {
   def eq(x: Seq[Double], y: Seq[Double], tol: Double = Eps) {
     x.length should equal (y.length)
     (x zip y).foreach { case (x, y) => x should be (y plusOrMinus tol) }
+  }
+  
+  /** Tests for approximate equality between sequences of `Complex`s. */
+  def eqc(x: Seq[Complex], y: Seq[Complex], tol: Double = Eps) {
+    x.length should equal (y.length)
+    (x zip y).foreach {
+      case (x, y) => {
+        x.real should be (y.real plusOrMinus tol)
+        x.imag should be (y.imag plusOrMinus tol)
+      }
+    }
   }
   
 }
