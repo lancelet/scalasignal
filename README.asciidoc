@@ -18,6 +18,10 @@ ScalaSignal currently implements the following:
   - `sosfilt(sos, x)` - second order section (SOS) / biquad filtering
   - `butterSOSEven(n, Wn)` - SOS coefficients for even-order Butterworth 
      filters
+  - `fft(x)` - Fast Fourier Transform, for x.length values that are a power
+     of 2
+  - `ifft(h)` - Inverse Fast Fourier Transform, for h.length values that
+     are a power of 2
 
 == Installation ==
 
