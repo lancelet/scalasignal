@@ -5,8 +5,6 @@ import org.scalatest.matchers.ShouldMatchers
 
 class ButterTest extends FunSuite with ShouldMatchers {
 
-  import FilterTest._
-
   test("butterSOSEven is called with an odd order (requires even)") {
     intercept[IllegalArgumentException] { Butter.butterSOSEven(5, 0.5) }
   }

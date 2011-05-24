@@ -4,7 +4,7 @@ import org.scalatest.FunSuite
 
 class FiltFiltTest extends FunSuite {
 
-  import FilterTest._
+  import Comparisons._
 
   test("filtfilt is called on data that is too short") {
     intercept[IllegalArgumentException] {
@@ -22,7 +22,7 @@ class FiltFiltTest extends FunSuite {
                                  1253, 5000)
     // apply filtfilt and check output
     val y = FiltFilt.filtfilt(b, List[Double](1), x)
-    assert(doubleItAeq(y, yExpected))
+    eq(y, yExpected)
   }
 
   test("apply filtfilt with simple 2nd order Butterworth coefficients (IIR)") {
@@ -37,7 +37,7 @@ class FiltFiltTest extends FunSuite {
 				 13.2717, 12.0638, 10.9936)
     // apply filtfilt and check output
     val y = FiltFilt.filtfilt(b, a, x)
-    assert(doubleItAeq(y, yExpected, 1.0E-4))  // 1.0E-4: precis Octave output
+    eq(y, yExpected, 1.0E-4)  // 1.0e-4: precis of Octave output
   }
 
   test("apply a low-pass 2nd order Butterworth filtfilt to an ECG phantom") {
@@ -46,7 +46,7 @@ class FiltFiltTest extends FunSuite {
     val b = List(0.0036, 0.0072, 0.0036)
     val y = FiltFilt.filtfilt(b, a, ECG.noisyecg)
     val yExpected = ECG.butter2filtfilt
-    assert(doubleItAeq(y, yExpected, 1e-6))
+    eq(y, yExpected, 1e-6)
   }
 
   test("apply a low-pass 4th order Butterworth SOS filter to an ECG phantom") {
