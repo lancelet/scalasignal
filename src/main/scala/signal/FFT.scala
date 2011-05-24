@@ -20,9 +20,21 @@ object FFT {
 
   /** Check that a number is a power of two. */
   private def isPowerOfTwo(x: Int): Boolean = {
+    nextPow2(x) == x
+  }
+  
+  /** Finds the next greatest power of two from a given positive number.
+   *  
+   *  @param x number from which to search
+   *  @return the next greatest power of two */
+  def nextPow2(x: Int): Int = {
+    require(x >= 0)
     import math.{ pow, ceil, log }
-    val np2 = pow(2.0, ceil(log(x) / log(2.0))).toInt
-    np2 == x
+    if (x <= 1) {
+      2
+    } else {
+      pow(2.0, ceil(log(x) / log(2.0))).toInt
+    }
   }
     
   /** Fast Fourier Transformation.

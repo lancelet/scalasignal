@@ -1,9 +1,10 @@
 package signal
 
 import org.scalatest.FunSuite
+import org.scalatest.matchers.ShouldMatchers
 import scalala.scalar._
 
-class FFTTest extends FunSuite {
+class FFTTest extends FunSuite with ShouldMatchers {
 
   import Comparisons._
   
@@ -35,6 +36,13 @@ class FFTTest extends FunSuite {
     intercept [IllegalArgumentException] {
       FFT.fft(x)
     }
+  }
+  
+  test("nextPow2") {
+    FFT.nextPow2(1) should be (2)
+    FFT.nextPow2(2) should be (2)
+    FFT.nextPow2(13) should be (16)
+    FFT.nextPow2(16) should be (16)
   }
   
 }
