@@ -22,6 +22,8 @@ ScalaSignal currently implements the following:
      of 2
   - `ifft(h)` - Inverse Fast Fourier Transform, for h.length values that
      are a power of 2
+  - `psd(x, fs)` - Power spectral density estimation
+  - `bandwidth(pd, fract)` - Signal bandwidth estimation
 
 == Installation ==
 
