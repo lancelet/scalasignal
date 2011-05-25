@@ -13,17 +13,18 @@ Copyright (C) Jonathan Merritt 2011.
 
 ScalaSignal currently implements the following:
 
-  - `filter(b, a, x, si)` - digital filtering with FIR or IIR filters
-  - `filtfilt(b, a, x)` - forward-reverse zero phase lag digital filtering
-  - `sosfilt(sos, x)` - second order section (SOS) / biquad filtering
+  - `bandwidth(pd, fract)` - Signal bandwidth estimation
   - `butterSOSEven(n, Wn)` - SOS coefficients for even-order Butterworth 
      filters
-  - `fft(x)` - Fast Fourier Transform, for x.length values that are a power
+  - `detrend(x)` - Removes a linear trend from a signal
+  - `filter(b, a, x, si)` - digital filtering with FIR or IIR filters
+  - `filtfilt(b, a, x)` - forward-reverse zero phase lag digital filtering
+  - `fft(x)` - Fast Fourier Transform, for `x.length` values that are a power
      of 2
-  - `ifft(h)` - Inverse Fast Fourier Transform, for h.length values that
+  - `ifft(h)` - Inverse Fast Fourier Transform, for `h.length` values that
      are a power of 2
-  - `psd(x, fs)` - Power spectral density estimation
-  - `bandwidth(pd, fract)` - Signal bandwidth estimation
+  - `psd(x, fs)` - Power spectral density estimation     
+  - `sosfilt(sos, x)` - second order section (SOS) / biquad filtering
 
 == Installation ==
 
