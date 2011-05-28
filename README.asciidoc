@@ -19,10 +19,8 @@ ScalaSignal currently implements the following:
   - `detrend(x)` - Removes a linear trend from a signal
   - `filter(b, a, x, si)` - digital filtering with FIR or IIR filters
   - `filtfilt(b, a, x)` - forward-reverse zero phase lag digital filtering
-  - `fft(x)` - Fast Fourier Transform, for `x.length` values that are a power
-     of 2
-  - `ifft(h)` - Inverse Fast Fourier Transform, for `h.length` values that
-     are a power of 2
+  - `fft(x)` - Fast Fourier Transform
+  - `ifft(h)` - Inverse Fast Fourier Transform
   - `psd(x, fs)` - Power spectral density estimation     
   - `sosfilt(sos, x)` - second order section (SOS) / biquad filtering
 
