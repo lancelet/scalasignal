@@ -17,8 +17,12 @@ with Eclipsify {
   // val scalaCheck = "org.scala-tools.testing" % "scalacheck_2.8.1" % "1.8"
 
   // Apache Commons Math
-  val commonsMath = "org.apache.commons" % "commons-math" % "2.0"
+  //val commonsMath = "org.apache.commons" % "commons-math" % "2.0"
 
+  // JTransforms
+  val signalmlRepo = "SignalMLRepo" at "http://signalml.org/maven/repository"
+  val jTransforms = "edu.emory.mathcs" % "jtransforms" % "2.3"
+  
   // enable unchecked warnings
   //override def compileOptions = super.compileOptions ++ Seq(Unchecked)
 }

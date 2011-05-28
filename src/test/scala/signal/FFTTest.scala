@@ -10,7 +10,7 @@ class FFTTest extends FunSuite with ShouldMatchers {
   
   test("apply an FFT to a sequence of Doubles") {
     val x = List[Double](3, 5, 2, 8, 7, 9, 3, 1)
-    val hExpected = List[Complex](
+    val hExpected = List[Complex](  // from Octave
       38, 
       -11.7782 - 1.1213 * i,
       5 - 5 * i,
@@ -31,11 +31,32 @@ class FFTTest extends FunSuite with ShouldMatchers {
     eqc(x, xOriginal.map(implicitly[Complex](_)))
   }
   
-  test("check that FFT complains about a non power-of-2 length") {
+  test("apply FFT to an even non-power-of-two length") {
+    val x = List[Double](1, 2, 3, 4)
+    val hExpected = List[Complex](10, -2 + 2 * i, -2, -2 - 2 * i)
+    val h = FFT.fft(x)
+    eqc(h, hExpected)
+  }
+  
+  test("apply FFT to an odd non-power-of-two length") {
     val x = List[Double](1, 6, 7, 3, 4, 9, 6, -5, -1)
-    intercept [IllegalArgumentException] {
-      FFT.fft(x)
-    }
+    val h = FFT.fft(x)
+    val hExpected = List[Complex](  // from Octave
+      30,
+      -11.53849 - 12.00903 * i,
+      5.44743 - 16.80991 * i,
+      8.66025 * i,
+      -4.40895 + 2.99335 * i,
+      -4.40895 - 2.99335 * i,
+      -8.66025 * i,
+      5.44743 + 16.80991 * i,
+      -11.53849 + 12.00903 * i
+    )
+    eqc(h, hExpected, 1e-5)
+  }
+  
+  test("apply FFT to an ECG phantom") {
+    eqc(FFT.fft(ECG.noisyecg), ECG.fft)
   }
   
   test("nextPow2") {
