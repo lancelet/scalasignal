@@ -30,7 +30,7 @@ object PSD {
    *     `N` is even).  This accounts for the complex-conjugate pairs which
    *     were discarded in step 2.
    * 
-   * @TODO: add windowing and spectrogram options; also compare with Matlab
+   * @todo add windowing and spectrogram options; also compare with Matlab
    *   output
    * 
    * @param x the signal
