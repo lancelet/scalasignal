@@ -5,13 +5,13 @@ import scalala.tensor.dense.DenseMatrix
 
 class SOSFiltTest extends FunSuite {
 
-  //import FilterTest._
+  import Comparisons._
 
   test("apply a 2-sample boxcar filter with an SOSFilt") {
     val filter = SOSFilt(0.5, 0.5, 0.0, 0.0, 0.0)
     val result = filter(List(1., 2, 3, 4, 5, 6, 7, 8, 9, 10))
     val expected = List(0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 8.5, 9.5)
-    eq(result, expected)
+    eqd(result, expected)
   }
 
   test("apply a 4-th order Butterworth filter with an SOSFilt stack") {
@@ -24,7 +24,7 @@ class SOSFiltTest extends FunSuite {
 			 0.9793515, 1.7315426, 2.6772461, 3.7467150,
 			 4.8657874, 5.9763508)
     val y = SOSFilt.sosfilt(fStack, x)
-    eq(y, yExpected, 1e-7)
+    eqd(y, yExpected, 1e-7)
   }
 
   test("apply a 4th order low pass Butterworth filter to an ECG phantom") {
@@ -33,7 +33,7 @@ class SOSFiltTest extends FunSuite {
     val y = SOSFilt.sosfilt(filters, ECG.noisyecg)
     val gain = 1.8322e-4 // gain from Matlab
     val yExpected = ECG.butter4sosfilt.map(_ * 1.8322e-4)
-    eq(y, yExpected, 1e-4)
+    eqd(y, yExpected, 1e-4)
   }
 
   test("apply a 4-th order Butterworth filter specified using a Matrix") {
@@ -46,7 +46,7 @@ class SOSFiltTest extends FunSuite {
     val y = SOSFilt.sosfilt(filter, x)
     val yExpected = List(0.0010, 0.0093, 0.0440, 0.1420, 0.3582, 0.7612,
 			 1.4265, 2.4282, 3.8372, 5.7059).map(_ * 1000.0)
-    eq(y, yExpected, 1.0)
+    eqd(y, yExpected, 1.0)
   }
 
   test("SOSFilt evaluation should be lazy where possible") {

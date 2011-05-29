@@ -14,7 +14,7 @@ class FilterTest extends FunSuite {
     val x = List(1, 2, 3, 4, 5, 6, 7, 8, 9, 10.0)
     val y = Filter.filter(b, a, x)
     val yExpected = List(0.25, 1, 2.5, 4, 5.5, 7, 8.5, 10, 11.5, 13.0)
-    eq(y, yExpected)
+    eqd(y, yExpected)
   }
 
   test("apply an FIR filter with specified initial state") {
@@ -24,7 +24,7 @@ class FilterTest extends FunSuite {
     val si = List(5, 7.)
     val y = Filter.filter(b, a, x, Some(si))
     val yExpected = List(5.25, 8, 2.5, 4, 5.5, 7, 8.5, 10, 11.5, 13)
-    eq(y, yExpected)
+    eqd(y, yExpected)
   }
 
   test("apply an IIR filter with no initial state") {
@@ -34,7 +34,7 @@ class FilterTest extends FunSuite {
     val y = Filter.filter(b, a, x)
     val yExpected = List(0.25, -0.25, 2, -4.25, 12.75, -27, 54.25, -72.25, -7, 
     					 553.75)
-    eq(y, yExpected)					 
+    eqd(y, yExpected)					 
   }
 
   test("apply an IIR filter with specified initial state") {
@@ -45,7 +45,7 @@ class FilterTest extends FunSuite {
     val y = Filter.filter(b, a, x, Some(si))
     val yExpected = List(-2.75, 18.75, -72, 232.75, -654.25, 1649, -3656.75,
 			 6750.75, -8145, -6517.25)
-    eq(y, yExpected)	 
+    eqd(y, yExpected)	 
   }
 
   test("filter is called with an invalid initial state") {
@@ -64,7 +64,7 @@ class FilterTest extends FunSuite {
     val b = List(0.0036, 0.0072, 0.0036)
     val y = Filter.filter(b, a, ECG.noisyecg)
     val yExpected = ECG.butter2filter
-    eq(y, yExpected)
+    eqd(y, yExpected, 1e-6)
     /* // Plot in case of problems
     import scalala.library.Plotting._
     import scalala.scalar.Scalar
