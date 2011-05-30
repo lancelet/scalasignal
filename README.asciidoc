@@ -25,6 +25,7 @@ ScalaSignal currently implements the following:
   - `sosfilt(sos, x)` - second order section (SOS) / biquad filtering
   - Windowing functions:
     ** `hann(n, periodic)` - Hann (Hanning / raised cosine) window
+    ** `rectwin(n)` - rectangular (identity) window
     ** `tukeywin(n, a)` - Tukey (tapered cosine) window
 
 == Installation ==

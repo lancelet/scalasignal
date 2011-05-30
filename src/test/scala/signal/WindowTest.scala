@@ -5,6 +5,31 @@ import org.scalatest.FunSuite
 class WindowTest extends FunSuite {
     
   import Comparisons._
+
+  test("hann") {
+    // test an 8-sample window
+    val hann8 = List[Double](0, 0.18826, 0.61126, 0.95048, 0.95048, 0.61126,
+      0.18826, 0)
+    eqd(Window.hann(8), hann8, 1e-5)
+    
+    // test a 1-sample window
+    eqd(Window.hann(1), List[Double](1))
+    
+    // test a 9-sample periodic window
+    val hann9p = List[Double](0, 0.11698, 0.41318, 0.75, 0.96985, 0.96985,
+      0.75, 0.41318, 0.11698)
+    eqd(Window.hann(9, true), hann9p, 1e-5)
+    
+    // check that hann complains if n <= 0
+    intercept[IllegalArgumentException] {
+      Window.hann(0)
+    }
+  }
+
+  test("rectwin") {
+    // rectangular window
+    eqd(Window.rectwin(3), List[Double](1, 1, 1))
+  }
   
   test("tukeywin") {
     // for a <= 0, tukeywin should be a rectangular window
@@ -31,25 +56,5 @@ class WindowTest extends FunSuite {
       Window.tukeywin(0, 0.5)
     }
   }
-  
-  test("hann") {
-    // test an 8-sample window
-    val hann8 = List[Double](0, 0.18826, 0.61126, 0.95048, 0.95048, 0.61126,
-      0.18826, 0)
-    eqd(Window.hann(8), hann8, 1e-5)
     
-    // test a 1-sample window
-    eqd(Window.hann(1), List[Double](1))
-    
-    // test a 9-sample periodic window
-    val hann9p = List[Double](0, 0.11698, 0.41318, 0.75, 0.96985, 0.96985,
-      0.75, 0.41318, 0.11698)
-    eqd(Window.hann(9, true), hann9p, 1e-5)
-    
-    // check that hann complains if n <= 0
-    intercept[IllegalArgumentException] {
-      Window.hann(0)
-    }
-  }
-  
 }

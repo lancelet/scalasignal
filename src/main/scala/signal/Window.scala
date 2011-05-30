@@ -5,6 +5,36 @@ import scala.collection.immutable._
 
 object Window {
 
+  /** Hann (Hanning / raised cosine) window.
+   *  
+   *  The Hann window is a pair of touching cosine functions.  If the
+   *  `periodic` flag is set, a window of length `n+1` is computed, and the
+   *  first `n` values are returned.
+   *  
+   *  ===Algorithm===
+   *  The Hann window is defined by the equation:
+   *  {{{
+   *  w(x) = [ 0.5 * (1 - cos(2*Pi*(x)))   if n > 1
+   *         [ 1                           if n = 1
+   *  }}}
+   *  The Hann window is equivalent to a Tukey window with parameter `a=1`.
+   *  
+   *  @param n number of samples in the window
+   *  @param periodic if this is `true`, a window of `n+1` is computed and
+   *    the first `n` values are returned
+   *  @return window */
+  def hann(n: Int, periodic: Boolean = false): IndexedSeq[Double] =
+    if (periodic) tukeywin(n + 1, 1).take(n) else tukeywin(n, 1)  
+
+  /** Rectangular window
+   *  
+   *  A rectangular window is equivalent to no window at all.  It is simply
+   *  a sequence of 1.0 repeated `n` times.
+   *  
+   *  @param n number of samples in the window
+   *  @return window */
+  def rectwin(n: Int): IndexedSeq[Double] = Vector.fill[Double](n)(1)
+    
   /** Tukey (tapered cosine) window.
    * 
    *  Tukey windows are tapered cosines.  The left and right parts of the
@@ -45,26 +75,5 @@ object Window {
       }
     }
   }
-  
-  /** Hann (Hanning / raised cosine) window.
-   *  
-   *  The Hann window is a pair of touching cosine functions.  If the
-   *  `periodic` flag is set, a window of length `n+1` is computed, and the
-   *  first `n` values are returned.
-   *  
-   *  ===Algorithm===
-   *  The Hann window is defined by the equation:
-   *  {{{
-   *  w(x) = [ 0.5 * (1 - cos(2*Pi*(x)))   if n > 1
-   *         [ 1                           if n = 1
-   *  }}}
-   *  The Hann window is equivalent to a Tukey window with parameter `a=1`.
-   *  
-   *  @param n number of samples in the window
-   *  @param periodic if this is `true`, a window of `n+1` is computed and
-   *    the first `n` values are returned
-   *  @return window */
-  def hann(n: Int, periodic: Boolean = false): IndexedSeq[Double] =
-    if (periodic) tukeywin(n + 1, 1).take(n) else tukeywin(n, 1)
-  
+
 }
