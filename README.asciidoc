@@ -36,15 +36,14 @@ repository):
   $ git clone git://github.com/lancelet/scalasignal.git
 
 This will create a new directory called `scalasignal`.  Next, use
-http://code.google.com/p/simple-build-tool/[sbt] to compile the project:
+https://github.com/harrah/xsbt[sbt/xsbt] to compile the project:
 
   $ cd scalasignal
   $ sbt
 
-http://code.google.com/p/simple-build-tool/[sbt] will launch, and collect
+https://github.com/harrah/xsbt[sbt/xsbt] will launch, and collect
 everything it needs for the project.  Within `sbt`, you can then run:
 
-  > update
   > test
 
 This will run the packaged unit tests for the project.
