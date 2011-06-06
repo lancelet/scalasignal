@@ -48,12 +48,13 @@ everything it needs for the project.  Within `sbt`, you can then run:
 
 This will run the packaged unit tests for the project.
 
-In order to make the library available via Apache Ivy on your local
-machine, run (from inside `sbt`):
+== NOTE: Problems with netlib-java-0.9.3.pom ==
 
-  > publish-local
+If you encounter sha1 hash conflicts when fetching `netlib-java-0.9.0.pom` from
+repo.scalanlp.org, a workaround is to checkout
+https://github.com/scalala/Scalala[Scalala] from GitHub, and then run
 
-This will make the library available as the artefact:
-
-  "GitHub" %% "scalasignal" % "0.3-SNAPSHOT"
+  $ sbt update
  
+It will then pull `netlib-java` into the Ivy cache, and sbt/xsbt will happily
+use the cache version.
