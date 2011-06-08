@@ -47,14 +47,3 @@ everything it needs for the project.  Within `sbt`, you can then run:
   > test
 
 This will run the packaged unit tests for the project.
-
-== NOTE: Problems with netlib-java-0.9.3.pom ==
-
-If you encounter sha1 hash conflicts when fetching `netlib-java-0.9.0.pom` from
-repo.scalanlp.org, a workaround is to checkout
-https://github.com/scalala/Scalala[Scalala] from GitHub, and then run
-
-  $ sbt update
- 
-It will then pull `netlib-java` into the Ivy cache, and sbt/xsbt will happily
-use the cache version.
