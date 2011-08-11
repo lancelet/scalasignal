@@ -4,7 +4,7 @@ version := "0.3-SNAPSHOT"
 
 organization := "com.github.scalasignal"
 
-scalaVersion := "2.9.1.RC1"
+scalaVersion := "2.9.1.RC2"
 
 // Maven repositories
 resolvers ++= Seq(
