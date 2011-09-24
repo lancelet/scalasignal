@@ -4,7 +4,7 @@ version := "0.3-SNAPSHOT"
 
 organization := "com.github.scalasignal"
 
-scalaVersion := "2.9.1.RC2"
+scalaVersion := "2.9.1"
 
 // Maven repositories
 resolvers ++= Seq(
@@ -21,4 +21,4 @@ libraryDependencies ++= Seq(
 )
 
 // Test library dependencies
-libraryDependencies += "org.scalatest" % "scalatest_2.9.0" % "1.6.1" % "test"
+libraryDependencies += "org.scalatest" % "scalatest_2.9.1" % "1.6.1" % "test"

@@ -2,6 +2,7 @@
 .DS_Store
 lib_managed
 target
+.target
 project-old/boot
 project-old/plugins/project
 project-old/plugins/target
