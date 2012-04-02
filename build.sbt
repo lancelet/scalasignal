@@ -6,6 +6,11 @@ organization := "com.github.scalasignal"
 
 scalaVersion := "2.9.1-1"
 
+addCompilerPlugin("org.scala-tools.sxr" % "sxr_2.9.0" % "0.2.7")
+
+scalacOptions <+= scalaSource in Compile map { "-P:sxr:base-directory:" +
+  _.getAbsolutePath }
+
 // Maven repositories
 resolvers ++= Seq(
   //"Scala-Tools Snapshots" at "http://scala-tools.org/repo-snapshots",
