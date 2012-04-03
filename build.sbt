@@ -13,14 +13,12 @@ scalacOptions <+= scalaSource in Compile map { "-P:sxr:base-directory:" +
 
 // Maven repositories
 resolvers ++= Seq(
-  "ScalaNLP" at "http://repo.scalanlp.org/repo",
-  "Nest-web" at "http://www.array.ca/nest-web/maven"
+  "Sonatype" at "https://oss.sonatype.org/content/groups/public"
 )
 
 // Runtime library dependencies
 libraryDependencies ++= Seq(
-  "org.scalala" % "scalala_2.9.1" % "1.0.0.RC2",
-  "edu.emory.mathcs" % "jtransforms" % "2.3"
+  "org.scalala" % "scalala_2.9.1" % "1.0.0.RC2"
 )
 
 // Test library dependencies
