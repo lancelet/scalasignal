@@ -13,8 +13,6 @@ scalacOptions <+= scalaSource in Compile map { "-P:sxr:base-directory:" +
 
 // Maven repositories
 resolvers ++= Seq(
-  //"Scala-Tools Snapshots" at "http://scala-tools.org/repo-snapshots",
-  "OnDex" at "http://ondex.rothamsted.bbsrc.ac.uk/nexus/content/groups/public",
   "ScalaNLP" at "http://repo.scalanlp.org/repo",
   "SignalML" at "http://signalml.org/maven/repository"
 )
