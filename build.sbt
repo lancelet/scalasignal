@@ -14,7 +14,7 @@ scalacOptions <+= scalaSource in Compile map { "-P:sxr:base-directory:" +
 // Maven repositories
 resolvers ++= Seq(
   "ScalaNLP" at "http://repo.scalanlp.org/repo",
-  "SignalML" at "http://signalml.org/maven/repository"
+  "Nest-web" at "http://www.array.ca/nest-web/maven"
 )
 
 // Runtime library dependencies
