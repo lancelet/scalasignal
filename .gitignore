@@ -1,5 +1,6 @@
 *~
 .DS_Store
+.cache
 lib_managed
 target
 .target
