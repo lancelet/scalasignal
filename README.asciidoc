@@ -7,7 +7,7 @@ language, with the eventual aim of implementing much of the functionality
 found in other signal processing toolboxen.
 
 ScalaSignal is released under the LGPL.  See LICENSE for details.
-Copyright (C) Jonathan Merritt 2011.
+Copyright (C) Jonathan Merritt 2013.
 
 == Current Functionality ==
 
