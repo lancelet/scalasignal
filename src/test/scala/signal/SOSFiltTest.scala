@@ -2,6 +2,7 @@ package signal
 
 import org.scalatest.FunSuite
 import breeze.linalg.DenseMatrix
+import scala.collection.immutable.Iterable
 
 class SOSFiltTest extends FunSuite {
 
@@ -9,7 +10,7 @@ class SOSFiltTest extends FunSuite {
 
   test("apply a 2-sample boxcar filter with an SOSFilt") {
     val filter = SOSFilt(0.5, 0.5, 0.0, 0.0, 0.0)
-    val result = filter(List(1., 2, 3, 4, 5, 6, 7, 8, 9, 10))
+    val result = filter(List(1.0, 2, 3, 4, 5, 6, 7, 8, 9, 10))
     val expected = List(0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 8.5, 9.5)
     eqd(result, expected)
   }
@@ -18,7 +19,7 @@ class SOSFiltTest extends FunSuite {
     // generate the filters using butterSOSEven
     val fStack = Butter.butterSOSEven(4, 0.2)
     // test data
-    val x = List(1., 2, 3, 4, 5, 6, 7, 8, 9, 10)
+    val x = List(1.0, 2, 3, 4, 5, 6, 7, 8, 9, 10)
     // expected output (generated using Octave)
     val yExpected = List(0.0048243, 0.0403774, 0.1665251, 0.4606177, 
 			 0.9793515, 1.7315426, 2.6772461, 3.7467150,
@@ -42,7 +43,7 @@ class SOSFiltTest extends FunSuite {
       Array(1, 2, 1, 1, -1.5752, 0.6263),
       Array(1, 2, 1, 1, -1.7688, 0.8262)
     )
-    val x = List(1., 2, 3, 4, 5, 6, 7, 8, 9, 10)
+    val x = List(1.0, 2, 3, 4, 5, 6, 7, 8, 9, 10)
     val y = SOSFilt.sosfilt(filter, x)
     val yExpected = List(0.0010, 0.0093, 0.0440, 0.1420, 0.3582, 0.7612,
 			 1.4265, 2.4282, 3.8372, 5.7059).map(_ * 1000.0)
@@ -51,17 +52,18 @@ class SOSFiltTest extends FunSuite {
 
   test("SOSFilt evaluation should be lazy where possible") {
     // create Iterable[Double] that keeps track of number of requested elements
-    val trackingIterable = new Iterable[Double] {
+    class TrackingIterable() extends Iterable[Double] {
       private var _pullCount: Int = 0
       def pullCount: Int = _pullCount
       def iterator: Iterator[Double] = new Iterator[Double] {
-	override def hasNext: Boolean = true
-	override def next(): Double = {
-	  _pullCount = _pullCount + 1
-	  0.0
-	}
+        override def hasNext: Boolean = true
+        override def next(): Double = {
+          _pullCount = _pullCount + 1
+          0.0
+        }
       }
     }
+    val trackingIterable = new TrackingIterable()
 
     // create lazy evaluation scenario
     val inStream = Stream() ++ trackingIterable

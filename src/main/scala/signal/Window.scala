@@ -57,23 +57,25 @@ object Window {
    *    0 and 1, and represents the sum of the left and right cosine taper
    *    widths
    *  @return window */
-  def tukeywin(n: Int, a: Double = 0.5): IndexedSeq[Double] = 
-  new IndexedSeq[Double] {
-    require(n > 0)
-    private val aa = if (a < 0) 0.0 else if (a > 1) 1.0 else a
-    private val pi2Ona = 2 * Pi / aa
-    private val aOn2 = aa / 2
-    val length = n
-    def apply(item: Int): Double = {
-      val x = item.toDouble / (length - 1)
-      if (x < aa / 2) {
-        0.5 * (1 + cos(pi2Ona * (x - aOn2)))
-      } else if (x >= 1 - aa / 2) {
-        0.5 * (1 + cos(pi2Ona * (x - 1 + aOn2)))
-      } else {
-        1
+  def tukeywin(n: Int, a: Double = 0.5): IndexedSeq[Double] =
+  if (a <= 0.0) rectwin(n)
+  else
+    new IndexedSeq[Double] {
+      require(n > 0)
+      private val aa = if (a > 1) 1.0 else a
+      private val pi2Ona = 2 * Pi / aa
+      private val aOn2 = aa / 2
+      val length = n
+      def apply(item: Int): Double = {
+        val x = item.toDouble / (length - 1)
+        if (x < aa / 2) {
+          0.5 * (1 + cos(pi2Ona * (x - aOn2)))
+        } else if (x >= 1 - aa / 2) {
+          0.5 * (1 + cos(pi2Ona * (x - 1 + aOn2)))
+        } else {
+          1
+        }
       }
     }
-  }
 
 }

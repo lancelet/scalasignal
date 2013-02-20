@@ -1,8 +1,9 @@
 package signal
 
-import collection.Iterator
-import collection.generic.CanBuildFrom
-import collection.immutable.{ IndexedSeq, Iterable, Seq }
+import scala.collection.Iterator
+import scala.collection.generic.CanBuildFrom
+import scala.collection.immutable.{ IndexedSeq, Iterable, Seq }
+import scala.reflect.ClassTag
 
 object Filter {
 
@@ -67,7 +68,7 @@ object Filter {
    bToT: B => T,
    cToT: C => T,
    bf: CanBuildFrom[Repr, T, Repr],
-   m: ClassManifest[T]): Repr = {
+   m: ClassTag[T]): Repr = {
 
     import n._
 

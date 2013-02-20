@@ -33,8 +33,8 @@ class WindowTest extends FunSuite {
   
   test("tukeywin") {
     // for a <= 0, tukeywin should be a rectangular window
-    eq(Window.tukeywin(4, 0), List(1, 1, 1, 1))
-    eq(Window.tukeywin(4, -1), List(1, 1, 1, 1))
+    eqd(Window.tukeywin(4, 0), List[Double](1, 1, 1, 1))
+    eqd(Window.tukeywin(4, -1), List[Double](1, 1, 1, 1))
     
     // try an intermediate tukey
     val tukey7 = List[Double](0, 0.22873, 0.70564, 0.99442, 1, 1, 0.99442,

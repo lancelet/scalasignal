@@ -1,8 +1,9 @@
 package signal
 
-import annotation.tailrec
-import collection.generic.CanBuildFrom
-import collection.immutable.{ LinearSeq, Seq }
+import scala.annotation.tailrec
+import scala.collection.generic.CanBuildFrom
+import scala.collection.immutable.{ LinearSeq, Seq }
+import scala.reflect.ClassTag
 import breeze.linalg.Matrix
 
 /** Single second order section (SOS) digital filter.
@@ -57,7 +58,7 @@ case class SOSFilt[@specialized(Float, Double) T]
   (x: Repr)
   (implicit seqX: Repr => Seq[T],
    bf: CanBuildFrom[Repr, T, Repr],
-   m: ClassManifest[T]): Repr = {
+   m: ClassTag[T]): Repr = {
     // filter iterator
     val filterIterator = new Iterator[T] {
       private var (z0, z1) = (n.zero, n.zero) // initial state
@@ -109,7 +110,7 @@ object SOSFilt {
   (sos: SOSFilt[T], x: Repr)
   (implicit seqX: Repr => Seq[T],
    bf: CanBuildFrom[Repr, T, Repr],
-   m: ClassManifest[T]): Repr = sos(x)
+   m: ClassTag[T]): Repr = sos(x)
 
   /** Applies a stack of `SOSFilt`s to a signal.
    *
@@ -127,7 +128,7 @@ object SOSFilt {
   (implicit xSeq: XRepr => Seq[T],
    sosSeq: SOSRepr => LinearSeq[SOSFilt[T]],
    bf: CanBuildFrom[XRepr, T, XRepr],
-   m: ClassManifest[T]): XRepr = {
+   m: ClassTag[T]): XRepr = {
     val builder = bf(x)
     builder ++= sosfiltTailRec(sos, x)
     builder.result
@@ -135,7 +136,7 @@ object SOSFilt {
   @tailrec
   private def sosfiltTailRec[T]
   (sos: LinearSeq[SOSFilt[T]], x: Seq[T])
-  (implicit m: ClassManifest[T]): Seq[T] = {
+  (implicit m: ClassTag[T]): Seq[T] = {
     val head = sos.head
     val tail = sos.tail
     if (tail.isEmpty) {
@@ -168,7 +169,7 @@ object SOSFilt {
   (implicit xSeq: Repr => Seq[T],
    f: Fractional[T],
    bf: CanBuildFrom[Repr, T, Repr],
-   m: ClassManifest[T]): Repr = {
+   m: ClassTag[T]): Repr = {
     // check the matrix size
     require(sos.cols == 6)
     require(sos.rows >= 1)

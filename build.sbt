@@ -20,3 +20,12 @@ libraryDependencies ++= Seq(
 
 // Test library dependencies
 libraryDependencies += "org.scalatest" %% "scalatest" % "1.9.1" % "test"
+
+// Scalac Options
+scalacOptions ++= Seq(
+  "-Yno-adapted-args", 
+  "-Ywarn-all", 
+  "-Xfatal-warnings",
+  "-deprecation",
+  "-feature"
+)

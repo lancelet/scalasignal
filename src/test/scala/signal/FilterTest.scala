@@ -21,7 +21,7 @@ class FilterTest extends FunSuite {
     val a = List(1)
     val b = List(0.25, 0.50, 0.75)
     val x = List(1, 2, 3, 4, 5, 6, 7, 8, 9, 10.0)
-    val si = List(5, 7.)
+    val si = List(5, 7.0)
     val y = Filter.filter(b, a, x, Some(si))
     val yExpected = List(5.25, 8, 2.5, 4, 5.5, 7, 8.5, 10, 11.5, 13)
     eqd(y, yExpected)
@@ -30,7 +30,7 @@ class FilterTest extends FunSuite {
   test("apply an IIR filter with no initial state") {
     val a = List(1, 5, 7)
     val b = List(0.25, 0.50, 0.75)
-    val x = List(1, 2, 3, 4, 5, 6, 7, 8, 9, 10.)
+    val x = List(1, 2, 3, 4, 5, 6, 7, 8, 9, 10.0)
     val y = Filter.filter(b, a, x)
     val yExpected = List(0.25, -0.25, 2, -4.25, 12.75, -27, 54.25, -72.25, -7, 
     					 553.75)
@@ -40,8 +40,8 @@ class FilterTest extends FunSuite {
   test("apply an IIR filter with specified initial state") {
     val a = List(1, 5, 7)
     val b = List(0.25, 0.50, 0.75)
-    val x = List(1, 2, 3, 4, 5, 6, 7, 8, 9, 10.)
-    val si = List(-3., 4)
+    val x = List(1, 2, 3, 4, 5, 6, 7, 8, 9, 10.0)
+    val si = List(-3.0, 4)
     val y = Filter.filter(b, a, x, Some(si))
     val yExpected = List(-2.75, 18.75, -72, 232.75, -654.25, 1649, -3656.75,
 			 6750.75, -8145, -6517.25)
@@ -51,8 +51,8 @@ class FilterTest extends FunSuite {
   test("filter is called with an invalid initial state") {
     val a = List(1, 5, 7)
     val b = List(0.25, 0.50, 0.75)
-    val x = List(1, 2, 3, 4, 5, 6, 7, 8, 9, 10.)
-    val si = List(-3., 4, 11)  // wrong length
+    val x = List(1, 2, 3, 4, 5, 6, 7, 8, 9, 10.0)
+    val si = List(-3.0, 4, 11)  // wrong length
     intercept[IllegalArgumentException] {
       Filter.filter(b, a, x, Some(si))
     }
@@ -82,17 +82,18 @@ class FilterTest extends FunSuite {
     //  that keeps track of the number of elements requested.  this is slightly 
     //  kludgy, as it depends upon un-documented features of Stream, but it can 
     //  be adapted if Stream changes.
-    val trackingIterable = new Iterable[Double] {
+    class TrackingIterable() extends Iterable[Double] {
       private var _pullCount: Int = 0
       def pullCount: Int = _pullCount
       def iterator: Iterator[Double] = new Iterator[Double] {
-	override def hasNext: Boolean = true
-	override def next(): Double = {
-	  _pullCount = _pullCount + 1
-	  0.0
-	}
+        override def hasNext: Boolean = true
+        override def next(): Double = {
+          _pullCount = _pullCount + 1
+          0.0
+        }
       }
     }
+    val trackingIterable = new TrackingIterable()
 
     // create a lazy evaluation situation
     val inStream = Stream() ++ trackingIterable  // trackingIterable not eval'd
