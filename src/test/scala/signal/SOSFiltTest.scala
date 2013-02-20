@@ -1,7 +1,7 @@
 package signal
 
 import org.scalatest.FunSuite
-import scalala.tensor.dense.DenseMatrix
+import breeze.linalg.DenseMatrix
 
 class SOSFiltTest extends FunSuite {
 

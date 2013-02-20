@@ -2,7 +2,7 @@ package signal
 
 import org.scalatest.FunSuite
 import org.scalatest.matchers.ShouldMatchers
-import scalala.scalar._
+import breeze.math._
 
 class FFTTest extends FunSuite with ShouldMatchers {
 
@@ -11,13 +11,13 @@ class FFTTest extends FunSuite with ShouldMatchers {
   test("apply an FFT to a sequence of Doubles") {
     val x = List[Double](3, 5, 2, 8, 7, 9, 3, 1)
     val hExpected = List[Complex](  // from Octave
-      38, 
+      38.0 + 0.0 * i,
       -11.7782 - 1.1213 * i,
-      5 - 5 * i,
+      5.0 - 5.0 * i,
       3.7782 - 3.1213 * i,
-      -8,
+      -8.0 + 0.0 * i,
       3.7782 + 3.1213 * i,
-      5 + 5 * i,
+      5.0 + 5.0 * i,
       -11.7782 + 1.1213 * i
     )
     val h = FFT.fft(x)
@@ -28,12 +28,12 @@ class FFTTest extends FunSuite with ShouldMatchers {
     val xOriginal = List[Double](3, 5, 2, 8, 7, 9, 3, 1)
     val h = FFT.fft(xOriginal)
     val x = FFT.ifft(h)
-    eqc(x, xOriginal.map(implicitly[Complex](_)))
+    eqc(x, xOriginal.map(Complex(_, 0.0)))
   }
   
   test("apply FFT to an even non-power-of-two length") {
     val x = List[Double](1, 2, 3, 4)
-    val hExpected = List[Complex](10, -2 + 2 * i, -2, -2 - 2 * i)
+    val hExpected = List[Complex](10 + 0 * i, -2 + 2 * i, -2 + 0 * i, -2 - 2 * i)
     val h = FFT.fft(x)
     eqc(h, hExpected)
   }
@@ -42,7 +42,7 @@ class FFTTest extends FunSuite with ShouldMatchers {
     val x = List[Double](1, 6, 7, 3, 4, 9, 6, -5, -1)
     val h = FFT.fft(x)
     val hExpected = List[Complex](  // from Octave
-      30,
+      30 + 0 * i,
       -11.53849 - 12.00903 * i,
       5.44743 - 16.80991 * i,
       8.66025 * i,

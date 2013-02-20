@@ -1,20 +1,22 @@
 name := "scalasignal"
 
-version := "0.3-SNAPSHOT"
+version := "0.4-SNAPSHOT"
 
 organization := "com.github.scalasignal"
 
-scalaVersion := "2.9.2"
+scalaVersion := "2.10.0"
 
 // Maven repositories
 resolvers ++= Seq(
-  "Sonatype" at "https://oss.sonatype.org/content/groups/public"
+  "Sonatype Snapshots" at 
+    "https://oss.sonatype.org/content/repositories/snapshots/"
 )
 
 // Runtime library dependencies
 libraryDependencies ++= Seq(
-  "org.scalala" % "scalala_2.9.1" % "1.0.0.RC2"
+  "org.scalanlp" %% "breeze-math" % "0.2-SNAPSHOT",
+  "net.sourceforge.jtransforms" % "jtransforms" % "2.4.0"
 )
 
 // Test library dependencies
-libraryDependencies += "org.scalatest" %% "scalatest" % "1.7.2" % "test"
+libraryDependencies += "org.scalatest" %% "scalatest" % "1.9.1" % "test"

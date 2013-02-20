@@ -1,13 +1,9 @@
 package signal
 
-import collection.generic.CanBuildFrom
-import collection.immutable.{ IndexedSeq, Seq, Vector }
-import scalala.operators.Implicits._
-import scalala.operators.{ BinaryOp, OpSub, OpMul, OpNeg, OpSolveMatrixBy, UnaryOp }
-import scalala.scalar.Scalar
-import scalala.tensor.::
-import scalala.tensor.dense.DenseMatrix
-import scalala.tensor.dense.DenseMatrix.{ eye, horzcat, vertcat, zeros }
+import collection.immutable.{ IndexedSeq, Seq }
+
+import breeze.linalg.DenseMatrix
+import breeze.linalg.DenseMatrix.{ eye, horzcat, vertcat, zeros }
 
 object FiltFilt {
 
@@ -25,28 +21,25 @@ object FiltFilt {
    *  @return initial filter states
    *  @author Jonathan Merritt <merritt@unimelb.edu.au>
    */
-  private def computeZi[T]
-  (bNorm: IndexedSeq[T], aNorm: IndexedSeq[T])
-  (implicit s: Scalar[T],
-   neg: UnaryOp[T, OpNeg, T],
-   sub: BinaryOp[T, T, OpSub, T],
-   mul: BinaryOp[T, T, OpMul, T],
-   sm: BinaryOp[DenseMatrix[T], DenseMatrix[T], OpSolveMatrixBy, 
-                DenseMatrix[T]],
-   m: ClassManifest[T]): List[T] = {
-    
+
+  private def computeZi(bNorm: IndexedSeq[Double], aNorm: IndexedSeq[Double]): List[Double] = {
     require(aNorm.size == bNorm.size)
-    val fo = aNorm.size - 1 // filter order
+    val fo = aNorm.size - 1   // filter order
 
     val b0 = bNorm.head
-    val aTail = aNorm.tail.toArray.asMatrix(fo, 1) // a(1, 2, ...) as col
-    val bTail = bNorm.tail.toArray.asMatrix(bNorm.size - 1, 1) // b(1, 2, ...)
+    val aTail = DenseMatrix.create(fo, 1, aNorm.tail.toArray)  // aTail as column vector
+    val bTail = DenseMatrix.create(fo, 1, bNorm.tail.toArray)  // bTail as column vector
 
-    val za = eye(fo) - horzcat(-aTail, vertcat(eye(fo - 1), zeros(1, fo - 1)))
+    val za =
+      if (fo > 1) {
+        eye[Double](fo) - horzcat(-aTail, vertcat(eye[Double](fo - 1), zeros[Double](1, fo - 1)))
+      } else {
+        eye[Double](1) + aTail
+      }
     val zb = bTail - aTail * b0
     val zi = za \ zb
 
-    zi(::, 0).toList
+    zi(::, 0).toArray.toList
   }
 
   /** Forward-reverse, zero phase lag digital filtering.
@@ -67,30 +60,10 @@ object FiltFilt {
    *  @param a denominator coefficients of the filter
    *  @param x signal to filter.  `x.size` must be greater than 3 times the
    *   order of the filter.
-   *  @tparam T type of the elements of `x`
-   *  @tparam A type of the elements of `a`
-   *  @tparam B type of the elements of `b`
-   *  @tparam Repr collection of `x`, which must be available as an
-   *   `Seq[T]`.
    *  @see [[scala.signal.Filter.filter]]
    *  @author Jonathan Merritt <merritt@unimelb.edu.au>
    */
-  def filtfilt[T, A, B, Repr]
-  (b: Seq[B], a: Seq[A], x: Repr)
-  (implicit seqX: Repr => Seq[T],
-   n: Fractional[T],
-   aToT: A => T,
-   bToT: B => T,
-   s: Scalar[T],
-   sub: BinaryOp[T, T, OpSub, T],
-   mul: BinaryOp[T, T, OpMul, T],
-   neg: UnaryOp[T, OpNeg, T],
-   solveMatrixBy: BinaryOp[DenseMatrix[T], DenseMatrix[T], OpSolveMatrixBy, 
-                           DenseMatrix[T]],
-   bf: CanBuildFrom[Repr, T, Repr],
-   m: ClassManifest[T]): Repr = {
-
-    import n._
+  def filtfilt(b: Seq[Double], a: Seq[Double], x: Seq[Double]): Seq[Double] = {
 
     // compute the filter order, and the approximate length of transients
     val filterOrder = math.max(b.size, a.size) - 1
@@ -103,10 +76,8 @@ object FiltFilt {
 
     // normalize a and b (divide by a0), and pad them out to the same length
     val a0 = a.head
-    val aNorm = a.map(implicitly[T](_) / a0).toIndexedSeq.
-      padTo(filterOrder + 1, n.zero)
-    val bNorm = b.map(implicitly[T](_) / a0).toIndexedSeq.
-      padTo(filterOrder + 1, n.zero)
+    val aNorm = a.map(_ / a0).toIndexedSeq.padTo(filterOrder + 1, 0.0)
+    val bNorm = b.map(_ / a0).toIndexedSeq.padTo(filterOrder + 1, 0.0)
 
     // compute the stable conditions for the filter's state variable 
     //  (si / x(0)).
@@ -118,11 +89,9 @@ object FiltFilt {
     //  startup transients in the filtering by allowing the filter to 
     //	accomodate itself to the artificially-added ends before it reaches the 
     //  true signal in the center.
-    val t2 = n.fromInt(2)
-    val xStart = x.drop(1).take(tL).toIndexedSeq.reverse.
-    	map { q: T => x.head * t2 - q }
-    val xEnd = x.takeRight(tL + 1).toIndexedSeq.reverse.drop(1).
-    	map { q: T => x.last * t2 - q }
+    val t2 = 2.0
+    val xStart = x.drop(1).take(tL).toIndexedSeq.reverse.map { x.head * t2 - _ }
+    val xEnd = x.takeRight(tL + 1).toIndexedSeq.reverse.drop(1).map { x.last * t2 - _ }
     val xx = xStart ++ x ++ xEnd
 
     // apply the filter in forward and reverse, computing the initial state
@@ -133,11 +102,7 @@ object FiltFilt {
     // trim out the central region of the signal (minus the padding for 
     //   transients)
     val y = rev.reverse.slice(tL, rev.size - tL)
-
-    // build an appropriate collection for the returned result
-    val builder = bf(x)
-    builder ++= y
-    builder.result
+    y
 
   }
 

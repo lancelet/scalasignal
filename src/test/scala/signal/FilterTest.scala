@@ -2,7 +2,7 @@ package signal
 
 import collection.immutable.{ Iterable, Stream }
 import org.scalatest.FunSuite
-import scalala.scalar.{ Complex => C }
+import breeze.math.Complex
 
 class FilterTest extends FunSuite {
 

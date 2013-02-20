@@ -3,7 +3,7 @@ package signal
 import annotation.tailrec
 import collection.generic.CanBuildFrom
 import collection.immutable.{ LinearSeq, Seq }
-import scalala.tensor.Matrix
+import breeze.linalg.Matrix
 
 /** Single second order section (SOS) digital filter.
  *
@@ -170,11 +170,11 @@ object SOSFilt {
    bf: CanBuildFrom[Repr, T, Repr],
    m: ClassManifest[T]): Repr = {
     // check the matrix size
-    require(sos.numCols == 6)
-    require(sos.numRows >= 1)
+    require(sos.cols == 6)
+    require(sos.rows >= 1)
 
     // convert the matrix to a sequence of filters and apply them
-    val filterSeq = (for (j <- 0 until sos.numRows) yield {
+    val filterSeq = (for (j <- 0 until sos.rows) yield {
       SOSFilt(sos(j, 0), sos(j, 1), sos(j, 2), sos(j, 3), sos(j, 4), sos(j, 5))
     }).toList
     sosfilt(filterSeq, x)

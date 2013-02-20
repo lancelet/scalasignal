@@ -3,7 +3,7 @@ package signal
 import scala.collection.immutable._
 import scala.collection.generic.CanBuildFrom
 import edu.emory.mathcs.jtransforms.fft.DoubleFFT_1D
-import scalala.scalar.Complex
+import breeze.math.Complex
 
 /** Fast Fourier Transforms. */
 object FFT {

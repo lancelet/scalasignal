@@ -1,8 +1,8 @@
 package signal
 
 import scala.io.Source
-import scalala.scalar._
 import scala.util.parsing.combinator.JavaTokenParsers
+import breeze.math.Complex
 
 /** Some ECG phantom test signals. */ 
 object ECG {
