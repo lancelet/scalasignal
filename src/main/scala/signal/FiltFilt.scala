@@ -63,7 +63,7 @@ object FiltFilt {
    *  @see [[scala.signal.Filter.filter]]
    *  @author Jonathan Merritt <merritt@unimelb.edu.au>
    */
-  def filtfilt(b: Seq[Double], a: Seq[Double], x: Seq[Double]): Seq[Double] = {
+  def filtfilt(b: Seq[Double], a: Seq[Double], x: Seq[Double]): IndexedSeq[Double] = {
 
     // compute the filter order, and the approximate length of transients
     val filterOrder = math.max(b.size, a.size) - 1
