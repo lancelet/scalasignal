@@ -4,7 +4,7 @@ version := "0.4-SNAPSHOT"
 
 organization := "com.github.scalasignal"
 
-scalaVersion := "2.10.0"
+scalaVersion := "2.10.1"
 
 // Maven repositories
 resolvers ++= Seq(
@@ -14,8 +14,8 @@ resolvers ++= Seq(
 
 // Runtime library dependencies
 libraryDependencies ++= Seq(
-  "org.scalanlp" %% "breeze-math" % "0.2-SNAPSHOT",
-  "net.sourceforge.jtransforms" % "jtransforms" % "2.4.0"
+  "org.scalanlp"                %% "breeze-math" % "0.3-SNAPSHOT",
+  "net.sourceforge.jtransforms" %  "jtransforms" % "2.4.0"
 )
 
 // Test library dependencies
