@@ -2,9 +2,9 @@ package signal
 
 import math.{ sin, Pi }
 import org.scalatest.FunSuite
-import org.scalatest.matchers.ShouldMatchers
+import org.scalatest.Matchers
 
-class PSDTest extends FunSuite with ShouldMatchers {
+class PSDTest extends FunSuite with Matchers {
 
   test("psd") (pending)
   

@@ -2,9 +2,9 @@ package signal
 
 import scala.collection.immutable._
 import org.scalatest.FunSuite
-import org.scalatest.matchers.ShouldMatchers
+import org.scalatest.Matchers
 
-class DetrendTest extends FunSuite with ShouldMatchers {
+class DetrendTest extends FunSuite with Matchers {
 
   test("detrend") {
     // signal with no linear trend

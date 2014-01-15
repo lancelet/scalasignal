@@ -1,6 +1,6 @@
 package signal
 
-import org.scalatest.matchers.ShouldMatchers._
+import org.scalatest.Matchers._
 import breeze.math.Complex
 
 /** Performs comparisons for testing purposes. */
@@ -13,7 +13,7 @@ object Comparisons {
   def eqd(x: Seq[Double], y: Seq[Double], tol: Double = Eps) {
     x.length should equal (y.length)
     for ((x,y) <- x zip y) {
-      x should be (y plusOrMinus tol)
+      x should be (y +- tol)
     }
   }
   
@@ -22,8 +22,8 @@ object Comparisons {
     x.length should equal (y.length)
     (x zip y).foreach {
       case (x, y) => {
-        x.real should be (y.real plusOrMinus tol)
-        x.imag should be (y.imag plusOrMinus tol)
+        x.real should be (y.real +- tol)
+        x.imag should be (y.imag +- tol)
       }
     }
   }

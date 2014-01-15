@@ -13,6 +13,5 @@ project-old/plugins/src_managed
 .classpath
 .scala_dependencies
 .settings
-project
 .idea
 .idea_modules

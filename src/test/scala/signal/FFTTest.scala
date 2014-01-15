@@ -1,10 +1,10 @@
 package signal
 
 import org.scalatest.FunSuite
-import org.scalatest.matchers.ShouldMatchers
+import org.scalatest.Matchers
 import breeze.math._
 
-class FFTTest extends FunSuite with ShouldMatchers {
+class FFTTest extends FunSuite with Matchers {
 
   import Comparisons._
   
